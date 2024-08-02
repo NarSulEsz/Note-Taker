@@ -13,15 +13,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// HTML Routes
 
 
+//Added functions to handle Routes requests conserning html
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/notes.html')); // Send the notes.html file when the /notes route is accessed
+    res.sendFile(path.join(__dirname, 'public/notes.html')); //This if  /notes route is given
   });
   
- 
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html')); // Send the index.html file for all other routes (catch-all)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html')); //This if  any other routes  is given
   });
 
+
+
+//Starting of server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
