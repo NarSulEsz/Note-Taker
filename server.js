@@ -25,6 +25,42 @@ app.get('*', (req, res) => {
   });
 
 
+// GET route to obtain notes that already saved
+app.get('/api/notes', (req, res) => {
+    fs.readFile('db/db.json', 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error reading notes');
+      }
+      res.json(JSON.parse(data)); 
+    });
+  });
+  
+  // POST route for saving any new note
+  app.post('/api/notes', (req, res) => {
+    const newNote = { id: uuidv4(), ...req.body };
+  
+    fs.readFile('db/db.json', 'utf8', (err, data) => { 
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error reading notes');
+      }
+  
+      const notes = JSON.parse(data); 
+      notes.push(newNote);
+  
+      fs.writeFile('db/db.json', JSON.stringify(notes, null, 2), (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error saving note');
+        }
+        res.json(newNote);
+      });
+    });
+  });
+
+
+
 
 //Starting of server
 app.listen(PORT, () => {
